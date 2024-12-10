@@ -167,3 +167,5 @@ C:\Users\jimif\RiderProjects\APIClientesCarne\APIClientesCarne\bin\Debug\net8.0\
 C:\Users\jimif\RiderProjects\APIClientesCarne\APIClientesCarne\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\jimif\RiderProjects\APIClientesCarne\APIClientesCarne\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\jimif\RiderProjects\APIClientesCarne\APIClientesCarne\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\jimif\RiderProjects\APIClientesCarne\APIClientesCarne\obj\Debug\net8.0\APIClientesCarne.sourcelink.json
+C:\Users\jimif\RiderProjects\APIClientesCarne\APIClientesCarne\bin\Debug\net8.0\BCrypt.Net-Next.dll

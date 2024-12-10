@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "mXE5x0evrzs=",
+  "dgSpecHash": "iLLMnSphiBI=",
   "success": true,
   "projectFilePath": "C:\\Users\\jimif\\RiderProjects\\APIClientesCarne\\APIClientesCarne\\APIClientesCarne.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jimif\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\jimif\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
+    "C:\\Users\\jimif\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\jimif\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\jimif\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.11\\microsoft.aspnetcore.openapi.8.0.11.nupkg.sha512",
     "C:\\Users\\jimif\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
