@@ -44,7 +44,7 @@ public class AuthController:ControllerBase
 
         if (!PassHash.VerifyPassword(loginRequest.Password, user.Password))
         {
-            return Unauthorized("Contraseña o Email Incorrecto");
+            return Unauthorized("Contraseña Incorrecta");
         }
         
         return Ok(user);
@@ -73,28 +73,54 @@ public class AuthController:ControllerBase
         if (registerRequest.UserId > 0)
         {
             //Por hacer
-        }
-        if (_context.Usuarios.Any(u => u.Email == registerRequest.Email))
-        {
-            return BadRequest();
-        }
+            var existingUser = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == registerRequest.UserId);
 
-        var newUser = new Usuario()
+            if (existingUser == null)
+            {
+                return NotFound($"Usuario con ID {registerRequest.UserId} no encontrado.");
+            }
+
+            // Actualizar los valores
+            existingUser.Username = registerRequest.Username;
+            existingUser.Nombre = registerRequest.Nombre;
+            existingUser.Email = registerRequest.Email;
+            existingUser.Telefono = registerRequest.Telefono;
+            
+            // Actualizar contraseña si se envía una nueva
+            if (!string.IsNullOrEmpty(registerRequest.Password))
+            {
+                existingUser.Password = PassHash.HashPassword(registerRequest.Password);
+            }
+
+            _context.SaveChanges();
+            return Ok(new { Message = "Usuario actualizado exitosamente.", UserId = existingUser.IdUsuario });
+
+        }
+        else
         {
-            Username = registerRequest.Username,
-            Email = registerRequest.Email,
-            Apellidos = registerRequest.Apellidos,
-            Rol = "Cliente",
-            Direccion = registerRequest.Direccion,
-            FechaNacimiento = registerRequest.FechaNacimiento,
-            Nombre = registerRequest.Nombre,
-            Password = PassHash.HashPassword(registerRequest.Password),
-            Telefono = registerRequest.Telefono,
-            FechaIngreso = DateTime.Today
-        };
-        _context.Usuarios.Add(newUser);
-        _context.SaveChanges();
-        return Ok(newUser);
+            if (_context.Usuarios.Any(u => u.Email == registerRequest.Email))
+            {
+                return BadRequest();
+            }
+
+            var newUser = new Usuario()
+            {
+                Username = registerRequest.Username,
+                Email = registerRequest.Email,
+                Apellidos = registerRequest.Apellidos,
+                Rol = "Cliente",
+                Direccion = registerRequest.Direccion,
+                FechaNacimiento = registerRequest.FechaNacimiento,
+                Nombre = registerRequest.Nombre,
+                Password = PassHash.HashPassword(registerRequest.Password),
+                Telefono = registerRequest.Telefono,
+                FechaIngreso = DateTime.Today
+            };
+            _context.Usuarios.Add(newUser);
+            _context.SaveChanges();
+            return Ok(newUser);
+        }
+       
     }
 
     
