@@ -51,7 +51,7 @@ public class AuthController:ControllerBase
     }
     
     //Endpoint de Registro de usuario o Edicion de informacion usuario
-    [HttpPost("Register")]
+    [HttpPost("RegisterEdit")]
     public IActionResult AddOrUpdate([FromBody] RegisterRequest registerRequest)
     {
         if (registerRequest == null)
@@ -70,14 +70,13 @@ public class AuthController:ControllerBase
         }
         
         //Verificar si es una edicion
-        if (registerRequest.UserId > 0)
+        if (registerRequest.IdUsuario > 0)
         {
-            //Por hacer
-            var existingUser = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == registerRequest.UserId);
+            var existingUser = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == registerRequest.IdUsuario);
 
             if (existingUser == null)
             {
-                return NotFound($"Usuario con ID {registerRequest.UserId} no encontrado.");
+                return NotFound($"Usuario con ID {registerRequest.IdUsuario} no encontrado.");
             }
 
             // Actualizar los valores
@@ -85,6 +84,9 @@ public class AuthController:ControllerBase
             existingUser.Nombre = registerRequest.Nombre;
             existingUser.Email = registerRequest.Email;
             existingUser.Telefono = registerRequest.Telefono;
+            existingUser.FechaNacimiento = registerRequest.FechaNacimiento;
+            existingUser.Apellidos = registerRequest.Apellidos;
+            existingUser.Direccion = registerRequest.Direccion;
             
             // Actualizar contraseña si se envía una nueva
             if (!string.IsNullOrEmpty(registerRequest.Password))
@@ -98,6 +100,7 @@ public class AuthController:ControllerBase
         }
         else
         {
+            //Si no es una edicion, realizar una creacion de usuario
             if (_context.Usuarios.Any(u => u.Email == registerRequest.Email))
             {
                 return BadRequest();
@@ -122,6 +125,5 @@ public class AuthController:ControllerBase
         }
        
     }
-
     
 }
