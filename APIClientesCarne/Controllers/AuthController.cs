@@ -39,22 +39,41 @@ public class AuthController:ControllerBase
         var user = _context.Usuarios.FirstOrDefault(u => u.Email == loginRequest.Email);
         if (user == null)
         {
-            return Unauthorized();
+            return Unauthorized("No se encontro el usuario");
         }
 
-        if (user.Password != loginRequest.Password)
+        if (!PassHash.VerifyPassword(loginRequest.Password, user.Password))
         {
-            return Unauthorized();
+            return Unauthorized("Contraseña o Email Incorrecto");
         }
         
         return Ok(user);
     }
     
-    //Endpoint de Registro
+    //Endpoint de Registro de usuario o Edicion de informacion usuario
     [HttpPost("Register")]
     public IActionResult AddOrUpdate([FromBody] RegisterRequest registerRequest)
     {
+        if (registerRequest == null)
+        {
+            return BadRequest("El cuerpo de la solicitud no puede estar vacío.");
+        }
+
+        if (string.IsNullOrEmpty(registerRequest.Email))
+        {
+            return BadRequest("El correo es obligatorio.");
+        }
+
+        if (string.IsNullOrEmpty(registerRequest.Username))
+        {
+            return BadRequest("El nombre de usuario es obligatorio.");
+        }
         
+        //Verificar si es una edicion
+        if (registerRequest.UserId > 0)
+        {
+            //Por hacer
+        }
         if (_context.Usuarios.Any(u => u.Email == registerRequest.Email))
         {
             return BadRequest();
