@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace APIClientesCarne.DTO;
 
-namespace APIClientesCarne.Models;
-
-public partial class Solicitud
+public class SolicitudDTO
 {
+    //NO ES NECESARIO HACER UN SCAFFOLDING CON TAL DE QUE EL DTO TENGA LOS MISMOS ATRIBUTOS QUE LA BD
     public int IdSolicitud { get; set; }
 
     public int IdUsuarioCliente { get; set; }
@@ -15,15 +13,12 @@ public partial class Solicitud
 
     public string? EstadoSolicitud { get; set; }
     
+    //ESTOS SON LOS NUEVOS ATRIBUTOS CON LOS MISMOS NOMBRES DE LA BD
     public string NombreEst { get; set; }
     
     public string TipoOperacion { get; set; }
     
     public string? Direccion { get; set; }
     
-    public string? Coordenadas { get; set; }
-
-    public virtual Usuario IdUsuarioClienteNavigation { get; set; } = null!;
-
-    public virtual ICollection<Inspeccione> Inspecciones { get; set; } = new List<Inspeccione>();
+    public string? Coordenadas { get; set; }    
 }
