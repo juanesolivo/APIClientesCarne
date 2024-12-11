@@ -49,7 +49,8 @@ public class AuthController:ControllerBase
         
         return Ok(user);
     }
-
+    
+    //Endpoint de Registro
     [HttpPost("Register")]
     public IActionResult Post([FromBody] RegisterRequest registerRequest)
     {
@@ -75,5 +76,13 @@ public class AuthController:ControllerBase
         _context.SaveChanges();
         return Ok(newUser);
     }
-    
+
+    [HttpPut("Update")]
+    public IActionResult Put([FromBody] Usuario usuario)
+    {
+        var user = _context.Usuarios.FirstOrDefault(u => u.Email == usuario.Email);
+        
+
+        return Ok();
+    }
 }
