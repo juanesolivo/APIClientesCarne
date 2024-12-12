@@ -21,6 +21,12 @@ public class SolicitudController:ControllerBase
         _context = context;
     }
 
+    [HttpGet]
+    public IActionResult GetSolicitudes()
+    {
+        var solicitudes = _context.Solicituds.ToList();
+        return Ok(solicitudes);
+    }
 
     //ESTO ES SOLO UN EJEMPLO DE COMO HACER UN POST, HAY QUE PONERLE MAS VALIDACIONES
     //FALTAN ATRIBUTOS, ESTO SOLO FUE UNA PRUEBA
@@ -29,24 +35,25 @@ public class SolicitudController:ControllerBase
     public IActionResult PostSolicitud([FromBody] SolicitudDTO solicitudDto)
     {
         
-        var NewSolicitud = new Solicitud
+        var newSolicitud = new Solicitud
         {
-            IdUsuarioCliente = solicitudDto.IdUsuarioCliente,
+            IdUsuarioCliente = solicitudDto.IdUsuarioCliente, //esto deberia de capturarlo a traves de JWT
             Coordenadas = solicitudDto.Coordenadas,
             Direccion = solicitudDto.Direccion,
             TipoOperacion = solicitudDto.TipoOperacion,
             NombreEst = solicitudDto.NombreEst,
-            
-            
+            FechaAdmitida = DateTime.Now,
+            EstadoSolicitud = "En espera",
+            FechaAprobada = null,
             
             
         };
         
         
-        _context.Solicituds.Add(NewSolicitud);
+        _context.Solicituds.Add(newSolicitud);
         _context.SaveChanges();
         
-        return Ok(NewSolicitud);
+        return Ok(newSolicitud);
         
         
         

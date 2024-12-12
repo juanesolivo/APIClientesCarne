@@ -3,15 +3,10 @@
 public class SolicitudDTO
 {
     //NO ES NECESARIO HACER UN SCAFFOLDING CON TAL DE QUE EL DTO TENGA LOS MISMOS ATRIBUTOS QUE LA BD
+    //y que a el modelo le pongas el mismo atributo
     public int IdSolicitud { get; set; }
 
     public int IdUsuarioCliente { get; set; }
-
-    public DateTime? FechaAdmitida { get; set; }
-
-    public DateTime? FechaAprobada { get; set; }
-
-    public string? EstadoSolicitud { get; set; }
     
     //ESTOS SON LOS NUEVOS ATRIBUTOS CON LOS MISMOS NOMBRES DE LA BD
     public string NombreEst { get; set; }

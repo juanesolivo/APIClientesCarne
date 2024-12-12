@@ -22,6 +22,8 @@ public partial class Solicitud
     public string? Direccion { get; set; }
     
     public string? Coordenadas { get; set; }
+    
+    
 
     public virtual Usuario IdUsuarioClienteNavigation { get; set; } = null!;
 

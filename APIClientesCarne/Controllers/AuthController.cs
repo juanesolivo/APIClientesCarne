@@ -24,7 +24,8 @@ public class AuthController:ControllerBase
 
 
 
-
+    //Esto hay que aplicarle el JWT para que solo muestre las solicitudes
+    //hechas por el usuario que esta revisando
     [HttpGet]
     public IActionResult GetUsers()
     {
