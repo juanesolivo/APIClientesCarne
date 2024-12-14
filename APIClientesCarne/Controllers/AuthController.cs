@@ -3,6 +3,10 @@ using APIClientesCarne.DTO;
 using APIClientesCarne.Models;
 using APIClientesCarne.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace APIClientesCarne.Controllers;
 
@@ -16,10 +20,34 @@ public class AuthController:ControllerBase
     
     
     private readonly MyDbContext _context;
+    private readonly IConfiguration _configuration;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(MyDbContext context)
+    public AuthController(IConfiguration configuration, MyDbContext context, ILogger<AuthController> logger)
     {
+        _configuration = configuration;
         _context = context;
+        _logger = logger;
+    }
+    
+    // Método para generar el token JWT
+    private IActionResult GenerateToken(Claim[] claims, Usuario user, string role)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(_configuration["Jwt:Issuer"],
+            _configuration["Jwt:Audience"],
+            claims,
+            expires: DateTime.UtcNow.AddMinutes(60),
+            signingCredentials: signIn
+        );
+
+        string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+
+        _logger.LogInformation("Login exitoso");
+
+        return Ok(new { Token = tokenValue, User = user, Role = role });
     }
 
 
@@ -42,13 +70,23 @@ public class AuthController:ControllerBase
         {
             return Unauthorized("No se encontro el usuario");
         }
-
+        
         if (!PassHash.VerifyPassword(loginRequest.Password, user.Password))
         {
             return Unauthorized("Contraseña Incorrecta");
         }
         
-        return Ok(user);
+        // Crear los claims para el token
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Role, user.Rol)
+        };
+
+        // Generar el token usando el método GenerateToken
+        return GenerateToken(claims, user, user.Rol);
+        
+        
     }
     
     //Endpoint de Registro de usuario o Edicion de informacion usuario

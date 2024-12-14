@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace APIClientesCarne.Models;
 
@@ -29,5 +30,6 @@ public partial class Usuario
 
     public virtual ICollection<Inspeccione> Inspecciones { get; set; } = new List<Inspeccione>();
 
+    [JsonIgnore]
     public virtual ICollection<Solicitud> Solicituds { get; set; } = new List<Solicitud>();
 }

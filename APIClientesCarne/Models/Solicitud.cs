@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace APIClientesCarne.Models;
 
@@ -24,7 +25,10 @@ public partial class Solicitud
     public string? Coordenadas { get; set; }
     
     
+    
+    
 
+    [JsonIgnore]
     public virtual Usuario IdUsuarioClienteNavigation { get; set; } = null!;
 
     public virtual ICollection<Inspeccione> Inspecciones { get; set; } = new List<Inspeccione>();
