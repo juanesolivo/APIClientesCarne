@@ -43,9 +43,10 @@ public class SolicitudController : ControllerBase
     }
 
     // Endpoint protegido con JWT
+    //HAY QUE HACER QUE SI LA SOLICITUD NO HA PASADO UN INSPECTOR, ESTE LA PUEDA EDITAR
     [Authorize]
-    [HttpPost]
-    public IActionResult PostSolicitud([FromBody] SolicitudDTO solicitudDto)
+    [HttpPost("SolicitudEdit")]
+    public IActionResult PostOrEditSolicitud([FromBody] SolicitudDTO solicitudDto)
     {
         // Obtener el email del usuario autenticado
         var userEmail = User.Identity.Name;
@@ -57,21 +58,49 @@ public class SolicitudController : ControllerBase
             return Unauthorized("Usuario no encontrado");
         }
 
-        var newSolicitud = new Solicitud
+        //verificar si es una edicion y si esta en espera
+        if (solicitudDto.IdSolicitud >= 0)
         {
-            IdUsuarioCliente = user.IdUsuario,
-            Coordenadas = solicitudDto.Coordenadas,
-            Direccion = solicitudDto.Direccion,
-            TipoOperacion = solicitudDto.TipoOperacion,
-            NombreEst = solicitudDto.NombreEst,
-            FechaAdmitida = DateTime.Now,
-            EstadoSolicitud = "En espera",
-            FechaAprobada = null,
-        };
+            var existingSolicitud = _context.Solicituds.FirstOrDefault(u => u.IdSolicitud == solicitudDto.IdSolicitud);
 
-        _context.Solicituds.Add(newSolicitud);
-        _context.SaveChanges();
+            if (existingSolicitud == null)
+            {
+                return NotFound($"Solicitud con ID {solicitudDto.IdSolicitud} no encontrado o no esta en espera.");
+            }
 
-        return Ok(newSolicitud);
+            if (existingSolicitud.EstadoSolicitud == "En espera")
+            {
+                //actualizar los valores
+                existingSolicitud.Direccion = solicitudDto.Direccion;
+                existingSolicitud.Coordenadas = solicitudDto.Coordenadas;
+                existingSolicitud.NombreEst = solicitudDto.NombreEst;
+                existingSolicitud.TipoOperacion = solicitudDto.TipoOperacion;
+            }
+            else
+            {
+                return NotFound($"Solicitud con ID {solicitudDto.IdSolicitud} ya esta asignada por ende no se puede editar.");
+            }
+        }
+        
+        
+
+        //Si no es edicion, crear la solicitud
+            var newSolicitud = new Solicitud
+            {
+                IdUsuarioCliente = user.IdUsuario,
+                Coordenadas = solicitudDto.Coordenadas,
+                Direccion = solicitudDto.Direccion,
+                TipoOperacion = solicitudDto.TipoOperacion,
+                NombreEst = solicitudDto.NombreEst,
+                FechaAdmitida = DateTime.Now,
+                EstadoSolicitud = "En espera",
+                FechaAprobada = null,
+            };
+
+            _context.Solicituds.Add(newSolicitud);
+            _context.SaveChanges();
+
+            return Ok(newSolicitud);
+        
     }
 }

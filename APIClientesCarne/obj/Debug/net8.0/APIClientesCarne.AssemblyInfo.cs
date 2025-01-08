@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APIClientesCarne")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+06cb5a3bf55060a5ef32b27a6a363e7d0c46eb80")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a0c02f07b6610c151140564ba28adc84134e24c2")]
 [assembly: System.Reflection.AssemblyProductAttribute("APIClientesCarne")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APIClientesCarne")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

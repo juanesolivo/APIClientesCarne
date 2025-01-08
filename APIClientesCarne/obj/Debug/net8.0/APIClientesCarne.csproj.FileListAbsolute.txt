@@ -344,3 +344,4 @@ C:\Users\chris\RiderProjects\APIClientesCarne\APIClientesCarne\obj\Debug\net8.0\
 C:\Users\chris\RiderProjects\APIClientesCarne\APIClientesCarne\obj\Debug\net8.0\APIClientesCarne.genruntimeconfig.cache
 C:\Users\chris\RiderProjects\APIClientesCarne\APIClientesCarne\obj\Debug\net8.0\ref\APIClientesCarne.dll
 C:\Users\chris\RiderProjects\APIClientesCarne\APIClientesCarne\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\jimif\RiderProjects\APIClientesCarne\APIClientesCarne\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
