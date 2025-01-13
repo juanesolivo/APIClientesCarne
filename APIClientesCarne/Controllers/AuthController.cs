@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace APIClientesCarne.Controllers;
 
@@ -54,6 +55,7 @@ public class AuthController:ControllerBase
 
     //Esto hay que aplicarle el JWT para que solo muestre las solicitudes
     //hechas por el usuario que esta revisando
+    [Authorize]
     [HttpGet]
     public IActionResult GetUsers()
     {
@@ -126,6 +128,7 @@ public class AuthController:ControllerBase
             existingUser.FechaNacimiento = registerRequest.FechaNacimiento;
             existingUser.Apellidos = registerRequest.Apellidos;
             existingUser.Direccion = registerRequest.Direccion;
+            existingUser.Rnc = registerRequest.Rnc;
             
             // Actualizar contraseña si se envía una nueva
             if (!string.IsNullOrEmpty(registerRequest.Password))
@@ -142,7 +145,7 @@ public class AuthController:ControllerBase
             //Si no es una edicion, realizar una creacion de usuario
             if (_context.Usuarios.Any(u => u.Email == registerRequest.Email))
             {
-                return BadRequest();
+                return BadRequest("El correo electrónico ya está registrado.");
             }
 
             var newUser = new Usuario()
@@ -151,6 +154,7 @@ public class AuthController:ControllerBase
                 Email = registerRequest.Email,
                 Apellidos = registerRequest.Apellidos,
                 Rol = "Cliente",
+                Estado = "Activo",
                 Direccion = registerRequest.Direccion,
                 FechaNacimiento = registerRequest.FechaNacimiento,
                 Nombre = registerRequest.Nombre,

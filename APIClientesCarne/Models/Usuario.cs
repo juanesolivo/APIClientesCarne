@@ -27,6 +27,9 @@ public partial class Usuario
     public DateTime? FechaNacimiento { get; set; }
 
     public DateTime? FechaIngreso { get; set; }
+    
+    public string Rnc { get; set; }  // Nuevo campo
+    public string Estado { get; set; } // Nuevo campo
 
     public virtual ICollection<Inspeccione> Inspecciones { get; set; } = new List<Inspeccione>();
 

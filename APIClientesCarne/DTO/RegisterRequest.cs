@@ -13,4 +13,8 @@ public class RegisterRequest
     public string? Telefono { get; set; }
     public DateTime? FechaNacimiento { get; set; }
     
+    public string Rnc { get; set; }  // Nuevo campo
+    
+    public string Estado { get; set; } // Nuevo campo
+    
 }
