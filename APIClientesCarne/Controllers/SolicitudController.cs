@@ -18,6 +18,41 @@ public class SolicitudController : ControllerBase
     {
         _context = context;
     }
+    
+    
+    
+    
+    
+    // Endpoint para obtener una solicitud específica por ID
+    [Authorize]
+    [HttpGet("{id}")]
+    public IActionResult GetSolicitudById(int id)
+    {
+        // Obtener el email del usuario autenticado
+        var userEmail = User.Identity.Name;
+        // Obtener el usuario autenticado de la base de datos
+        var user = _context.Usuarios.FirstOrDefault(u => u.Email == userEmail);
+
+        if (user == null)
+        {
+            return Unauthorized("Usuario no encontrado");
+        }
+
+        // Buscar la solicitud por ID y validar que pertenece al usuario autenticado
+        var solicitud = _context.Solicituds
+            .FirstOrDefault(s => s.IdSolicitud == id && s.IdUsuarioCliente == user.IdUsuario);
+
+        if (solicitud == null)
+        {
+            return NotFound($"Solicitud con ID {id} no encontrada o no pertenece al usuario.");
+        }
+
+        return Ok(solicitud);
+    }
+
+    
+    
+    
 
     // Endpoint protegido con JWT
     [Authorize]
@@ -95,6 +130,7 @@ public class SolicitudController : ControllerBase
                 FechaAdmitida = DateTime.Now,
                 EstadoSolicitud = "En espera",
                 FechaAprobada = null,
+                RNC = solicitudDto.RNC
             };
 
             _context.Solicituds.Add(newSolicitud);

@@ -16,4 +16,6 @@ public class SolicitudDTO
     public string? Direccion { get; set; }
     
     public string? Coordenadas { get; set; }    
+    
+    public string RNC { get; set; }
 }

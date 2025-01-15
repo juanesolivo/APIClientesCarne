@@ -738,6 +738,12 @@ namespace APIClientesCarne.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSolicitud"));
 
+                    b.Property<string>("Coordenadas")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EstadoSolicitud")
                         .HasMaxLength(100)
                         .IsUnicode(false)
@@ -754,6 +760,17 @@ namespace APIClientesCarne.Migrations
                     b.Property<int>("IdUsuarioCliente")
                         .HasColumnType("int")
                         .HasColumnName("idUsuarioCliente");
+
+                    b.Property<string>("NombreEst")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RNCC")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TipoOperacion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("IdSolicitud")
                         .HasName("PK__Solicitu__D801DDB84A4E5364");

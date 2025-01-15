@@ -24,6 +24,8 @@ public partial class Solicitud
     
     public string? Coordenadas { get; set; }
     
+    public string? RNC { get; set; }
+    
     
     
     

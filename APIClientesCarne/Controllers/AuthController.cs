@@ -15,10 +15,10 @@ namespace APIClientesCarne.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AuthController:ControllerBase
+public class AuthController : ControllerBase
 {
-    
-    
+
+
     private readonly MyDbContext _context;
     private readonly IConfiguration _configuration;
     private readonly ILogger<AuthController> _logger;
@@ -30,6 +30,14 @@ public class AuthController:ControllerBase
         _logger = logger;
     }
     
+    
+    
+    
+    
+    
+    
+    
+
     // Método para generar el token JWT
     private IActionResult GenerateToken(Claim[] claims, Usuario user, string role)
     {
@@ -49,6 +57,35 @@ public class AuthController:ControllerBase
 
         return Ok(new { Token = tokenValue, User = user, Role = role });
     }
+        
+    // Endpoint para cambiar la contraseña del usuario
+    [HttpPost("ChangePassword")]
+    public IActionResult ChangePassword([FromBody] ChangePasswordRequest changePasswordRequest)
+    {
+        if (changePasswordRequest == null)
+        {
+            return BadRequest("La solicitud no puede estar vacía.");
+        }
+
+        if (string.IsNullOrEmpty(changePasswordRequest.NewPassword) || changePasswordRequest.UserId <= 0)
+        {
+            return BadRequest("La nueva contraseña y el ID del usuario son obligatorios.");
+        }
+
+        // Obtener el usuario por ID
+        var user = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == changePasswordRequest.UserId);
+
+        if (user == null)
+        {
+            return NotFound("Usuario no encontrado.");
+        }
+
+        // Cambiar la contraseña
+        user.Password = changePasswordRequest.NewPassword;
+        _context.SaveChanges();
+
+        return Ok("Contraseña actualizada exitosamente.");
+    }
 
 
 
@@ -58,7 +95,7 @@ public class AuthController:ControllerBase
     public IActionResult GetUsers()
     {
         var users = _context.Usuarios.ToList();
-        
+
         return Ok(users);
     }
 
@@ -70,12 +107,12 @@ public class AuthController:ControllerBase
         {
             return Unauthorized("No se encontro el usuario");
         }
-        
-        if (!PassHash.VerifyPassword(loginRequest.Password, user.Password))
+
+        if (loginRequest.Password != user.Password)
         {
             return Unauthorized("Contraseña Incorrecta");
         }
-        
+
         // Crear los claims para el token
         var claims = new[]
         {
@@ -85,11 +122,10 @@ public class AuthController:ControllerBase
 
         // Generar el token usando el método GenerateToken
         return GenerateToken(claims, user, user.Rol);
-        
-        
+
+
     }
-    
-    //Endpoint de Registro de usuario o Edicion de informacion usuario
+
     [HttpPost("RegisterEdit")]
     public IActionResult AddOrUpdate([FromBody] RegisterRequest registerRequest)
     {
@@ -107,8 +143,8 @@ public class AuthController:ControllerBase
         {
             return BadRequest("El nombre de usuario es obligatorio.");
         }
-        
-        //Verificar si es una edicion
+
+        // Verificar si es una edición
         if (registerRequest.IdUsuario > 0)
         {
             var existingUser = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == registerRequest.IdUsuario);
@@ -126,23 +162,25 @@ public class AuthController:ControllerBase
             existingUser.FechaNacimiento = registerRequest.FechaNacimiento;
             existingUser.Apellidos = registerRequest.Apellidos;
             existingUser.Direccion = registerRequest.Direccion;
-            
-            // Actualizar contraseña si se envía una nueva
+
+            // Actualizar contraseña solo si se envía una nueva
             if (!string.IsNullOrEmpty(registerRequest.Password))
             {
-                existingUser.Password = PassHash.HashPassword(registerRequest.Password);
+                if (existingUser.Password != registerRequest.Password)
+                {
+                    existingUser.Password = PassHash.HashPassword(registerRequest.Password);
+                }
             }
 
             _context.SaveChanges();
             return Ok(new { Message = "Usuario actualizado exitosamente.", UserId = existingUser.IdUsuario });
-
         }
         else
         {
-            //Si no es una edicion, realizar una creacion de usuario
+            // Si no es una edición, realizar una creación de usuario
             if (_context.Usuarios.Any(u => u.Email == registerRequest.Email))
             {
-                return BadRequest();
+                return BadRequest("Ya existe un usuario con ese correo.");
             }
 
             var newUser = new Usuario()
@@ -162,7 +200,14 @@ public class AuthController:ControllerBase
             _context.SaveChanges();
             return Ok(newUser);
         }
-       
+        
+        
     }
-    
+}
+
+// Modelo para la solicitud de cambio de contraseña
+public class ChangePasswordRequest
+{
+    public int UserId { get; set; }
+    public string NewPassword { get; set; }
 }
