@@ -17,6 +17,18 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactPolicy",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 //configutacion del jwt PARA DESPUES
 
 builder.Services.AddAuthentication(options =>
@@ -105,6 +117,7 @@ app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
+app.UseCors("ReactPolicy");
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
