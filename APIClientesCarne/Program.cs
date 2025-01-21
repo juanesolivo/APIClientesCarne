@@ -19,13 +19,17 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("ReactPolicy",
+    options.AddPolicy("AllowReactApp",
         builder =>
         {
             builder
-                .AllowAnyOrigin()
+                .WithOrigins(
+                    "http://localhost:3000"    // React app
+                       // API URL
+                )
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
 
@@ -101,7 +105,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
-app.UseCors("ReactPolicy");
+app.UseCors("AllowReactApp");
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
